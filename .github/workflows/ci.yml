@@ -26,14 +26,11 @@ jobs:
           # Check if branch is already checked out. If yes, then checkout it, otherwise checkout it as a new local branch.
           if git checkout $MAJOR 2>/dev/null; then
             echo "Branch $MAJOR already checked out"
+            git merge main --no-edit
           else
             echo "Branch $MAJOR not yet checked out - checking out now"
             git checkout -b "$MAJOR"
           fi
-
-      - name: Merge main
-        run: |
-          git merge main
 
       - name: Remove dist/.gitignore
         run: |
@@ -61,4 +58,4 @@ jobs:
           author_email: ${{ vars.CICD_BOT_EMAIL }}
           message: "other: Version ${{ steps.semver.outputs.next }}"
           tag: ${{ steps.semver.outputs.next }}
-          push: "--force --set-upstream origin ${{ steps.semver.outputs.nextMajor }}"
+          push: "--set-upstream origin ${{ steps.semver.outputs.nextMajor }}"
