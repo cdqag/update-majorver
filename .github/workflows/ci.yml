@@ -33,30 +33,9 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Copy files to temp
-        env:
-          RUNNER_TEMP: ${{ runner.temp }}
+      - name: Remove .gitignore from dist
         run: |
-          cp -R dist action.yml LICENSE README.md "$RUNNER_TEMP"
-
-      - name: Switch to major branch
-        env:
-          MAJOR: ${{ steps.semver.outputs.nextMajor }}
-        run: |
-          # Check if branch is already checked out. If yes, then checkout it, otherwise checkout it as a new local branch.
-          if git checkout $MAJOR 2>/dev/null; then
-            echo "Branch $MAJOR already checked out"
-          else
-            echo "Branch $MAJOR not yet checked out - checking out now"
-            git switch --orphan $MAJOR
-          fi
-
-      - name: Copy artifacts
-        env:
-          RUNNER_TEMP: ${{ runner.temp }}
-        run: |
-          cp -R "$RUNNER_TEMP/dist" "$RUNNER_TEMP/action.yml" "$RUNNER_TEMP/LICENSE" "$RUNNER_TEMP/README.md" .
-          rm -rf node_modules
+          rm dist/.gitignore
 
       - name: Commit
         uses: EndBug/add-and-commit@v9
@@ -66,4 +45,4 @@ jobs:
           author_email: ${{ vars.CICD_BOT_EMAIL }}
           message: "other: Version ${{ steps.semver.outputs.next }}"
           tag: ${{ steps.semver.outputs.next }}
-          push: "--force --set-upstream origin ${{ steps.semver.outputs.nextMajor }}"
+          push: "--force origin ${{ steps.semver.outputs.nextMajor }}"
