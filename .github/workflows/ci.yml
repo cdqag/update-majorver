@@ -23,10 +23,9 @@ jobs:
         env:
           MAJOR: ${{ steps.semver.outputs.nextMajor }}
         run: |
-          git fetch
           if git checkout $MAJOR 2>/dev/null; then
             echo "Branch $MAJOR already checked out"
-            git merge main --no-edit
+            git pull --ff --no-edit main
           else
             echo "Branch $MAJOR not yet checked out - checking out now"
             git checkout -b "$MAJOR"
