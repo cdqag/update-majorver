@@ -18,12 +18,25 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ steps.semver.outputs.nextMajor }}
+
+      - name: Switch to major branch
+        env:
+          MAJOR: ${{ steps.semver.outputs.nextMajor }}
+        run: |
+          # Check if branch is already checked out. If yes, then checkout it, otherwise checkout it as a new local branch.
+          if git checkout $MAJOR 2>/dev/null; then
+            echo "Branch $MAJOR already checked out"
+          else
+            echo "Branch $MAJOR not yet checked out - checking out now"
+            git checkout -b "$MAJOR"
+          fi
 
       - name: Merge main
         run: |
           git merge main
+
+      - name: Remove dist/.gitignore
+        run: |
           rm dist/.gitignore
 
       - name: Setup Node.js
