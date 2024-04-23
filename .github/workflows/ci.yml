@@ -18,24 +18,18 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
 
       - name: Switch to major branch
         env:
           MAJOR: ${{ steps.semver.outputs.nextMajor }}
-          AUTHOR_NAME: ${{ vars.CICD_BOT_NAME }}
-          AUTHOR_EMAIL: ${{ vars.CICD_BOT_EMAIL }}
         run: |
-          echo "Configure user name and email"
-          git config user.name "$AUTHOR_NAME"
-          git config user.email "$AUTHOR_EMAIL"
-
-          echo "Git fetch"
-          git fetch
-
-          echo "Cechkout"
+          echo "Checkout"
           if git checkout $MAJOR 2>/dev/null; then
             echo "Branch $MAJOR already checked out"
-            git pull --allow-unrelated-histories --ff --no-edit origin main
+            git merge main
           else
             echo "Branch $MAJOR not yet checked out - checking out now"
             git checkout -b "$MAJOR"
@@ -59,6 +53,8 @@ jobs:
         uses: EndBug/add-and-commit@v9
         with:
           add: "."
+          author_name: ${{ vars.CICD_BOT_NAME }}
+          author_email: ${{ vars.CICD_BOT_EMAIL }}
           message: "other: Version ${{ steps.semver.outputs.next }}"
           tag: ${{ steps.semver.outputs.next }}
           push: "--set-upstream origin ${{ steps.semver.outputs.nextMajor }}"
