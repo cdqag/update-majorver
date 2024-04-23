@@ -48,7 +48,9 @@ jobs:
             echo "Branch $MAJOR already checked out"
           else
             echo "Branch $MAJOR not yet checked out - checking out now"
-            git switch --orphan --track $MAJOR
+            git switch --orphan $MAJOR
+            echo "Set upstream"
+            git branch  -u "origin/$MAJOR"
           fi
 
       - name: Copy artifacts
