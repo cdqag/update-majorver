@@ -22,11 +22,16 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: Switch to major branch
+      - name: Git config
+        uses: snow-actions/git-config-user@v1.0.0
+        with:
+          name: ${{ vars.CICD_BOT_NAME }}
+          email: ${{ vars.CICD_BOT_EMAIL }}
+
+      - name: Switch branch
         env:
           MAJOR: ${{ steps.semver.outputs.nextMajor }}
         run: |
-          echo "Checkout"
           if git checkout $MAJOR 2>/dev/null; then
             echo "Branch $MAJOR already checked out"
             git pull --ff --no-edit origin main
@@ -57,8 +62,6 @@ jobs:
         uses: EndBug/add-and-commit@v9
         with:
           add: "."
-          author_name: ${{ vars.CICD_BOT_NAME }}
-          author_email: ${{ vars.CICD_BOT_EMAIL }}
           message: "other: Version ${{ steps.semver.outputs.next }}"
           tag: ${{ steps.semver.outputs.next }}
           push: "--set-upstream origin ${{ steps.semver.outputs.nextMajor }}"
