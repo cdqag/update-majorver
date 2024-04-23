@@ -48,7 +48,7 @@ jobs:
             echo "Branch $MAJOR already checked out"
           else
             echo "Branch $MAJOR not yet checked out - checking out now"
-            git switch --orphan $MAJOR
+            git switch --orphan --track $MAJOR
           fi
 
       - name: Copy artifacts
