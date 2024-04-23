@@ -23,7 +23,7 @@ jobs:
         env:
           MAJOR: ${{ steps.semver.outputs.nextMajor }}
         run: |
-          # Check if branch is already checked out. If yes, then checkout it, otherwise checkout it as a new local branch.
+          git fetch
           if git checkout $MAJOR 2>/dev/null; then
             echo "Branch $MAJOR already checked out"
             git merge main --no-edit
