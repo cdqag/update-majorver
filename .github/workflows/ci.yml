@@ -55,6 +55,7 @@ jobs:
         run: npm run build
 
       - name: Unlock dist
+        continue-on-error: true
         run: |
           rm dist/.gitignore
 
