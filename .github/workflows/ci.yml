@@ -41,10 +41,6 @@ jobs:
             git checkout -b "$MAJOR"
           fi
 
-      - name: Remove dist/.gitignore
-        run: |
-          rm dist/.gitignore
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
