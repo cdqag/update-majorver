@@ -37,7 +37,7 @@ jobs:
         env:
           RUNNER_TEMP: ${{ runner.temp }}
         run: |
-          cp dist action.yml LICENSE "$RUNNER_TEMP"
+          cp -R dist action.yml LICENSE "$RUNNER_TEMP"
 
       - name: Switch to major branch
         env:
