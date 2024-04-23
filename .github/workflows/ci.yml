@@ -23,6 +23,7 @@ jobs:
         env:
           MAJOR: ${{ steps.semver.outputs.nextMajor }}
         run: |
+          git fetch
           if git checkout $MAJOR 2>/dev/null; then
             echo "Branch $MAJOR already checked out"
             git pull --ff --no-edit main
