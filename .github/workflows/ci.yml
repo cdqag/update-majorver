@@ -26,7 +26,7 @@ jobs:
           git fetch
           if git checkout $MAJOR 2>/dev/null; then
             echo "Branch $MAJOR already checked out"
-            git pull --ff --no-edit origin main
+            git pull --allow-unrelated-histories --ff --no-edit origin main
           else
             echo "Branch $MAJOR not yet checked out - checking out now"
             git checkout -b "$MAJOR"
