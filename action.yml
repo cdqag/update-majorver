@@ -5,6 +5,9 @@ inputs:
   github_token:
     description: GitHub token
     default: ${{ github.token }}
+  static_major_version:
+    description: Static major version
+    default: ''
 runs:
   using: node20
   main: dist/index.js

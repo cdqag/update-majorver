@@ -14,17 +14,23 @@ export default async function run(): Promise<void> {
       return;
     }
 
-    const tag = context.ref.substring(REFS_TAGS.length);
-    const regex = /^v?(?<major>\d+)\.\d+\.\d+$/;
-    const match = tag.match(regex);
-    if (match?.groups?.major == null) {
-      core.setFailed(
-        "tags require semantic versioning format like v1.2.3 or 1.2.3"
-      );
-      return;
-    }
+    let major = core.getInput("static_major_version");
+    if (major == "") {
+      core.info(`static major version not set, extracting from tag`);
+      const tag = context.ref.substring(REFS_TAGS.length);
+      const regex = /^v?(?<major>\d+)\.\d+\.\d+$/;
+      const match = tag.match(regex);
+      if (match?.groups?.major == null) {
+        core.setFailed(
+          "tags require semantic versioning format like v1.2.3 or 1.2.3"
+        );
+        return;
+      }
 
-    const major = `v${match.groups.major}`;
+      major = `v${match.groups.major}`;
+    } else {
+      core.info(`using static major version ${major}`);
+    }
 
     const refParams = {
       owner: context.repo.owner,

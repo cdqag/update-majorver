@@ -16,6 +16,12 @@ Create a workflow `.yml` file in your `.github/workflows` directory.
 An [example workflow](#example) is available below.
 For more information, reference the GitHub Help Documentation for [Creating a workflow file](https://help.github.com/en/articles/configuring-a-workflow#creating-a-workflow-file).
 
+### Inputs
+
+| Name                   | Default value | Description                                               |
+|------------------------|---------------|-----------------------------------------------------------|
+| `static_major_version` | `""`          | Use this major version instead of extracting from the tag |
+
 ## Example
 
 ```yml
