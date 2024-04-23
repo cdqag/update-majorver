@@ -9,14 +9,15 @@ export default async function run(): Promise<void> {
     const token = core.getInput("github_token");
     const octokit = getOctokit(token);
 
-    if (!context.ref.startsWith(REFS_TAGS)) {
-      core.setFailed("ref is not a tag");
-      return;
-    }
-
     let major = core.getInput("static_major_version");
     if (major == "") {
       core.info(`static major version not set, extracting from tag`);
+
+      if (!context.ref.startsWith(REFS_TAGS)) {
+        core.setFailed("ref is not a tag");
+        return;
+      }
+
       const tag = context.ref.substring(REFS_TAGS.length);
       const regex = /^v?(?<major>\d+)\.\d+\.\d+$/;
       const match = tag.match(regex);
