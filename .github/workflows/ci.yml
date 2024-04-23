@@ -37,7 +37,7 @@ jobs:
         env:
           RUNNER_TEMP: ${{ runner.temp }}
         run: |
-          cp -R dist action.yml LICENSE "$RUNNER_TEMP"
+          cp -R dist action.yml LICENSE README.md "$RUNNER_TEMP"
 
       - name: Switch to major branch
         env:
@@ -55,9 +55,8 @@ jobs:
         env:
           RUNNER_TEMP: ${{ runner.temp }}
         run: |
-          cp -R "$RUNNER_TEMP/dist" "$RUNNER_TEMP/action.yml" "$RUNNER_TEMP/LICENSE" .
-          ls -lsa
-          ls -lsa dist
+          cp -R "$RUNNER_TEMP/dist" "$RUNNER_TEMP/action.yml" "$RUNNER_TEMP/LICENSE" "$RUNNER_TEMP/README.md" .
+          rm -rf node_modules
 
       - name: Commit
         uses: EndBug/add-and-commit@v9
