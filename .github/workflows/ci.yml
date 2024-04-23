@@ -18,6 +18,13 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.semver.outputs.nextMajor }}
+
+      - name: Merge main
+        run: |
+          git merge main
+          rm dist/.gitignore
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -33,10 +40,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Remove .gitignore from dist
-        run: |
-          rm dist/.gitignore
-
       - name: Commit
         uses: EndBug/add-and-commit@v9
         with:
@@ -45,4 +48,4 @@ jobs:
           author_email: ${{ vars.CICD_BOT_EMAIL }}
           message: "other: Version ${{ steps.semver.outputs.next }}"
           tag: ${{ steps.semver.outputs.next }}
-          push: "--force origin ${{ steps.semver.outputs.nextMajor }}"
+          push: "--force --set-upstream origin ${{ steps.semver.outputs.nextMajor }}"
